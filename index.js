@@ -8,7 +8,7 @@ const START = 'https://eservices.landregistry.gov.uk/wps/portal/Property_Search'
 
 const getAddress = async id => {
     console.log(`Now checking ${id}`);
-    const nightmare = new Nightmare({ show: true });
+    const nightmare = new Nightmare({ show: false });
 
     try {
         await nightmare
@@ -36,20 +36,27 @@ const getAddress = async id => {
                     .map(el => el.innerText);
             })
             .end();
-
-        return { id, address: result[0], lease: result[1] };
+            console.log(result);
+            let refinedId = id.replace("\r", "");
+            let address = result[0].replace(/\n/g, " ");
+        return { id: refinedId, address: address, lease: result[1] };
     } catch(e) {
         console.error(e);
         return undefined;
     }
 };
 
-getAddress(numbers[0])
-    .then(a => console.dir(a))
-    .catch(e => console.error(e));
+
 
 const series = numbers.reduce(async (queue, number) => {
-    const dataArray = await Queue;
+    const dataArray = await queue;
     dataArray.push(await getAddress(number));
     return dataArray;
 }, Promise.resolve([]));
+
+series.then(data => {
+    const csvData = csvFormat(data.filter(i => i));
+    console.log(data)
+    writeFileSync('./output.csv', csvData, { encoding: 'utf8' })
+})
+.catch(e => console.error(e));
