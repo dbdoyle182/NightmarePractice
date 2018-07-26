@@ -5,7 +5,7 @@ require("dotenv").config()
 
 const numbers = ['1'];
 const email = process.env.SB_USER_NAME;
-const password = process.env.SB_PASSWORD;
+const password = process.env.SB_PASSWORD
 const number = "1";
 
 const START = "https://www.switchboard.tech/";
@@ -29,7 +29,7 @@ const getCheckpoints = async number => {
             .type('input[name="login"]', email)
             .wait('input[name="password"]')
             .type('input[name="password"]', password)
-            .click('input[value="Sign In"]')
+            .click('input[name="commit"]')
     } catch(e) {
         console.error(e);
     }

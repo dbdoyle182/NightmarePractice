@@ -20,7 +20,7 @@ const applyToJobs = async (location, title) => {
             .type("input[name=email]", email)
             .wait("input[name=password]")
             .type("input[name=password]", password)
-            .click("input[name=submitted]")
+            .click("input[type=submit]")
     } catch(e) {
         console.error(e)
     }
